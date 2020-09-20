@@ -1,7 +1,6 @@
 package hello.hellospring.repository;
 
 import hello.hellospring.domain.Member;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -17,7 +16,7 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
+    //    @Autowired
     public JdbcTemplateMemberRepository(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -25,12 +24,12 @@ public class JdbcTemplateMemberRepository implements MemberRepository {
     @Override
     public Member save(Member member) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        simpleJdbcInsert.withTableName("member").usingGeneratedKeyColumns("id");
+        simpleJdbcInsert.withTableName("member").usingGeneratedKeyColumns("id").usingColumns("name");
 
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", member.getName());
+//        Map<String, Object> parameters = new HashMap<>();
+//        parameters.put("name", member.getName());
 
-        Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+        Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource().addValue("name", member.getName()));
         member.setId(key.longValue());
 
         return member;

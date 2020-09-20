@@ -169,7 +169,7 @@ public class JdbcMemberRepository implements MemberRepository {
         }
     }
 
-    private void close(Connection connection) throws SQLException {
+    private void close(Connection connection) {
         DataSourceUtils.releaseConnection(connection, dataSource);
     }
 }
